@@ -1,0 +1,10 @@
+{
+	"appId": "sk.santa3d.oasis.skladnik",
+	"appName": "Skladnik-Mobile",
+	"webDir": "www",
+	"bundledWebRuntime": false,
+	"allowMixedContent": true,
+  	"server" : {
+  		"androidScheme": "http"
+        }
+}

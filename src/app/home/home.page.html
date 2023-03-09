@@ -1,0 +1,130 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Mobilný skladník - OASIS</ion-title>
+    <ion-progress-bar *ngIf="isLoading" type="indeterminate"></ion-progress-bar>
+    <ion-progress-bar *ngIf="isConnecting" type="indeterminate" color="danger"></ion-progress-bar>
+  </ion-toolbar>
+</ion-header>
+<ion-content [fullscreen]="true">
+
+  <div id="container">
+    <ion-card *ngIf="isConnecting">
+      <br>
+      <img alt="AUTO AGRO" width="60%" style="max-height: 5%;" src="assets/agrologo.png" />
+      <br>
+      <ion-card-header>
+        <ion-card-title>Vyhľadávam</ion-card-title>
+        <ion-card-subtitle>Hľadám spojenie na OASIS</ion-card-subtitle>
+      </ion-card-header>
+
+      <ion-card-content>
+        Vyhľadávam na lokálnej sieti počítač so spusteným OASIS proxy serverom
+      </ion-card-content>
+    </ion-card>
+
+
+    <ion-card *ngIf="isBase">
+      <br>
+      <img alt="AUTO AGRO" width="60%" style="max-height: 5%;" src="assets/agrologo.png" />
+      <br>
+      <ion-card-header>
+        <ion-card-title>Pripojené na {{baseUrl}}</ion-card-title>
+      </ion-card-header>
+
+      <ion-card-content>
+        <ion-button expand="block" (click)="doScan()">Skenuj kód</ion-button><br>
+        <ion-button expand="block" (click)="doManual()" color="success">Hľadaj ručne ručne</ion-button><br>
+        <!-- <ion-button expand="block" color="warning">Dotlač zoznam</ion-button> -->
+      </ion-card-content>
+    </ion-card>
+
+    <ion-modal [isOpen]="isKarty">
+      <ng-template>
+        <ion-header>
+          <ion-toolbar>
+            <ion-buttons slot="start">
+              <ion-button (click)="cancelKarty()">Zrušiť</ion-button>
+            </ion-buttons>
+            <ion-title>Nájdené karty</ion-title>
+          </ion-toolbar>
+        </ion-header>
+        <ion-content class="ion-padding">
+          <ion-list>
+            <ion-item *ngFor="let karta of karty" lines="none">
+
+
+              <ion-icon name="checkmark-circle" class="icon icon-center status-open-icon"
+                *ngIf="(karta.stav > 0)&&(karta.stav - karta.minStav>1)" slot="start" style="color:green;"
+                size="large"></ion-icon>
+
+              <ion-icon name="chevron-up-circle" class="icon icon-center status-open-icon"
+                *ngIf="(karta.stav > 0)&&(karta.stav <= karta.minStav+1)" slot="start" style="color:goldenrod;"
+                size="large"></ion-icon>
+
+              <ion-icon name="close-circle" class="icon icon-center status-open-icon" *ngIf="(karta.stav < 1)"
+                slot="start" style="color:red;" size="large"></ion-icon>
+
+
+              <ion-label class="first-item-label">
+                <span style="overflow-wrap: break-word;">
+                  <ion-label class="heading ion-text-wrap"><b>{{karta.nazov}}</b></ion-label>
+                </span>
+                <ion-row style="border-top: groove;">
+                  <ion-col col-10>
+                    <ion-label class="sub-heading">{{karta.uid}}</ion-label>
+                  </ion-col>
+                  <ion-col col-2>
+                    <ion-label class="sub-heading ion-text-right"><b>{{karta.stav}}</b> {{karta.mj}}</ion-label>
+                  </ion-col>
+                </ion-row>
+                <ion-row>
+                  <ion-col col-6>
+                    <ion-label class="sub-heading">Cena: {{karta.cena_p1 | currency:'EUR'}}</ion-label>
+                  </ion-col>
+                  <ion-col col-6>
+                    <ion-label class="sub-heading ion-text-right">s DPH: <b>{{karta.cena_p1sDPH|
+                        currency:'EUR'}}</b></ion-label>
+                  </ion-col>
+                </ion-row>
+              </ion-label>
+            </ion-item>
+          </ion-list>
+        </ion-content>
+      </ng-template>
+    </ion-modal>
+
+
+
+    <ion-modal [isOpen]="isManual">
+      <ng-template>
+        <ion-header>
+          <ion-toolbar>
+            <ion-buttons slot="start">
+              <ion-button (click)="cancelManual()">Zrušiť</ion-button>
+            </ion-buttons>
+            <ion-title>Vyhľadávanie</ion-title>
+          </ion-toolbar>
+        </ion-header>
+        <ion-content class="ion-padding">
+          <ion-searchbar show-clear-button="always" value="Vyhľadať kartu" [(ngModel)]="hladam"></ion-searchbar>
+          <ion-radio-group [(ngModel)]="typHladania">
+            <!-- items -->
+            <ion-item>
+              <ion-label>V kóde</ion-label>
+              <ion-radio slot="start" value="1" checked></ion-radio>
+            </ion-item>
+            <ion-item>
+              <ion-label>V názve</ion-label>
+              <ion-radio slot="start" value="2"></ion-radio>
+            </ion-item>
+          </ion-radio-group>
+          <ion-button expand="block" (click)="doSearch()" color="success">Hľadaj</ion-button><br>
+        </ion-content>
+      </ng-template>
+    </ion-modal>
+
+
+
+
+  </div>
+</ion-content>

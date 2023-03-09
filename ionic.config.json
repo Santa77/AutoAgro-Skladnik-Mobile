@@ -1,0 +1,7 @@
+{
+  "name": "Skladnik-Mobile",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}
